@@ -344,4 +344,29 @@ if ('serviceWorker' in navigator) {
 }
 
 render();
+<script>
+function attachGestures(el, i) {
+  let pressTimer = null;
+  let longPress = false;
+
+  el.addEventListener('touchstart', e => {
+    e.preventDefault();
+    longPress = false;
+
+    pressTimer = setTimeout(() => {
+      longPress = true;
+      addPoint(i, -1); // TAP LARGO → RESTA
+      navigator.vibrate?.(40);
+    }, 500); // 0.5 segundos
+  }, { passive: false });
+
+  el.addEventListener('touchend', e => {
+    clearTimeout(pressTimer);
+
+    if (!longPress) {
+      addPoint(i, 1); // TAP NORMAL → SUMA
+      navigator.vibrate?.(20);
+    }
+  });
+}
 </script>
